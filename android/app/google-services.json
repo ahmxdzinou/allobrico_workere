@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "546878591858",
+    "project_id": "allobricoapp",
+    "storage_bucket": "allobricoapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546878591858:android:557a095144ef128667c3eb",
+        "android_client_info": {
+          "package_name": "com.example.allobrico_worker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546878591858-jcee43uuj4014mcmgl6rghmcer0dt1mj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.allobrico_worker",
+            "certificate_hash": "41a168e1d7355489fc662b16ee0c73c3fa4ef570"
+          }
+        },
+        {
+          "client_id": "546878591858-m4fflitb659dglqj7923cclf7je6erip.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLwZn2CRLD1fZbTJKDjX0i4tIXcFlR6l8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546878591858-m4fflitb659dglqj7923cclf7je6erip.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "546878591858-icr8d7jumtha2kj1qimd8hvbbsq2kigj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.allobricoWorker"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546878591858:android:3005efb397ccd45567c3eb",
+        "android_client_info": {
+          "package_name": "com.example.allobricoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546878591858-m4fflitb659dglqj7923cclf7je6erip.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLwZn2CRLD1fZbTJKDjX0i4tIXcFlR6l8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546878591858-m4fflitb659dglqj7923cclf7je6erip.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "546878591858-icr8d7jumtha2kj1qimd8hvbbsq2kigj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.allobricoWorker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>546878591858-icr8d7jumtha2kj1qimd8hvbbsq2kigj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.546878591858-icr8d7jumtha2kj1qimd8hvbbsq2kigj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD1OzFhjBT-2_lKcHjRNifP_kHW7FCaYPY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>546878591858</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.allobricoWorker</string>
+	<key>PROJECT_ID</key>
+	<string>allobricoapp</string>
+	<key>STORAGE_BUCKET</key>
+	<string>allobricoapp.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:546878591858:ios:02d2cfecb5cbb99167c3eb</string>
+</dict>
+</plist>

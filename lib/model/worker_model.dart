@@ -1,15 +1,18 @@
+// Enumération pour les types de travailleurs
 enum WorkerType { plombier, electricien, peintre }
 
+// Modèle de données pour les travailleurs
 class WorkerModel {
-  String name;
-  String email;
-  String bio;
-  String profilePic;
-  String createdAt;
-  String phoneNumber;
-  String uid;
-  WorkerType workerType;
+  String name; // Nom du travailleur
+  String email; // Email du travailleur
+  String bio; // Bio du travailleur
+  String profilePic; // URL de l'image de profil du travailleur
+  String createdAt; // Date de création du compte
+  String phoneNumber; // Numéro de téléphone du travailleur
+  String uid; // UID unique du travailleur
+  WorkerType workerType; // Type de travailleur
 
+  // Constructeur pour initialiser les propriétés du modèle
   WorkerModel({
     required this.name,
     required this.email,
@@ -21,6 +24,7 @@ class WorkerModel {
     required this.workerType,
   });
 
+  // Constructeur factory pour créer une instance à partir d'une Map
   factory WorkerModel.fromMap(Map<String, dynamic> map) {
     return WorkerModel(
       name: map['name'] ?? '',
@@ -34,6 +38,7 @@ class WorkerModel {
     );
   }
 
+  // Méthode pour convertir les propriétés du modèle en Map
   Map<String, dynamic> toMap() {
     return {
       "name": name,
@@ -47,6 +52,7 @@ class WorkerModel {
     };
   }
 
+  // Méthode statique pour obtenir le type de travailleur à partir d'une chaîne de caractères
   static WorkerType _getWorkerTypeFromString(String typeString) {
     switch (typeString) {
       case 'Plombier':
@@ -60,6 +66,7 @@ class WorkerModel {
     }
   }
 
+  // Méthode statique pour convertir le type de travailleur en chaîne de caractères
   static String _workerTypeToString(WorkerType type) {
     switch (type) {
       case WorkerType.plombier:

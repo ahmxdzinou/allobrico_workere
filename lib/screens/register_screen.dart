@@ -1,8 +1,8 @@
-import 'package:allobrico_worker/widgets/custom_button.dart';
-import 'package:allobrico_worker/provider/auth_provider.dart';
-import 'package:country_picker/country_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:allobrico_worker/widgets/custom_button.dart'; // Bouton personnalisé
+import 'package:allobrico_worker/provider/auth_provider.dart'; // Provider pour la gestion de l'authentification
+import 'package:country_picker/country_picker.dart'; // Sélecteur de pays
+import 'package:flutter/material.dart'; // Composants Material Design pour Flutter
+import 'package:provider/provider.dart'; // Gestionnaire d'état pour Flutter
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,8 +12,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  // Contrôleur de texte pour le champ de saisie du numéro de téléphone
   final TextEditingController phoneController = TextEditingController();
 
+  // Pays sélectionné par défaut (Algérie)
   Country selectedCountry = Country(
     phoneCode: "213", 
     countryCode: "DZ", 
@@ -29,6 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Positionner le curseur à la fin du texte saisi
     phoneController.selection = TextSelection.fromPosition(
       TextPosition(
         offset: phoneController.text.length,
@@ -41,6 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 35),
             child: Column(
               children: [
+                // Conteneur pour l'image de l'illustration
                 Container(
                   width: 300,
                   height: 300,
@@ -50,6 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                // Titre de l'écran d'inscription
                 const Text(
                   "Inscription",
                   style: TextStyle(
@@ -58,6 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
+                // Texte descriptif
                 const Text(
                   "Ajoutez votre numéro, Nous vous enverrons un code de vérification",
                   style: TextStyle(
@@ -68,6 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
+                // Champ de saisie pour le numéro de téléphone
                 TextFormField(
                   cursorColor: Color.fromRGBO(251, 53, 105, 1),
                   controller: phoneController,
@@ -95,20 +102,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: Colors.black12),
                     ),
+                    // Sélecteur de pays dans le préfixe du champ
                     prefixIcon: Container(
                       padding: const EdgeInsets.all(10.0),
                       child: InkWell(
                         onTap: () {
+                          // Affichage du sélecteur de pays
                           showCountryPicker(
                             context: context,
-                              countryListTheme: const CountryListThemeData(
-                                bottomSheetHeight: 550,
-                              ),
-                              onSelect: (value) {
-                                setState(() {
-                                  selectedCountry = value;
-                                });
-                              }
+                            countryListTheme: const CountryListThemeData(
+                              bottomSheetHeight: 550,
+                            ),
+                            onSelect: (value) {
+                              setState(() {
+                                selectedCountry = value;
+                              });
+                            },
                           );
                         },
                         child: Text(
@@ -121,6 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                     ),
+                    // Icône de validation lorsque le numéro de téléphone est valide
                     suffixIcon: phoneController.text.length > 9
                         ? Container(
                             height: 30,
@@ -140,6 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                // Bouton personnalisé pour envoyer le numéro de téléphone
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -154,6 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  // Méthode pour envoyer le numéro de téléphone
   void sendPhoneNumber() {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     String phoneNumber = phoneController.text.trim();

@@ -1,11 +1,11 @@
-import 'package:allobrico_worker/screens/home_screen.dart';
-import 'package:allobrico_worker/provider/auth_provider.dart';
-import 'package:allobrico_worker/screens/worker_information_screen.dart';
-import 'package:allobrico_worker/utils/utils.dart';
-import 'package:allobrico_worker/widgets/custom_button.dart';
-import 'package:flutter/material.dart';
-import 'package:pinput/pinput.dart';
-import 'package:provider/provider.dart';
+import 'package:allobrico_worker/screens/home_screen.dart'; // Écran principal de l'application
+import 'package:allobrico_worker/provider/auth_provider.dart'; // Provider pour la gestion de l'authentification
+import 'package:allobrico_worker/screens/worker_information_screen.dart'; // Écran pour les informations des travailleurs
+import 'package:allobrico_worker/utils/utils.dart'; // Utilitaires divers
+import 'package:allobrico_worker/widgets/custom_button.dart'; // Bouton personnalisé
+import 'package:flutter/material.dart'; // Composants Material Design pour Flutter
+import 'package:pinput/pinput.dart'; // Widget pour la saisie de code PIN
+import 'package:provider/provider.dart'; // Gestionnaire d'état pour Flutter
 
 class OtpScreen extends StatefulWidget {
   final String verificationId;
@@ -16,30 +16,30 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  String? otpCode;
+  String? otpCode; // Code OTP saisi par l'utilisateur
 
   @override
   Widget build(BuildContext context) {
-    final isLoading =
-        Provider.of<AuthProvider>(context, listen: true).isLoading;
+    // Obtention de l'état de chargement depuis AuthProvider
+    final isLoading = Provider.of<AuthProvider>(context, listen: true).isLoading;
     return Scaffold(
       body: SafeArea(
         child: isLoading == true
             ? const Center(
+                // Affichage d'un indicateur de chargement si isLoading est vrai
                 child: CircularProgressIndicator(
                   color: Color.fromRGBO(251, 53, 105, 1),
                 ),
               )
             : Center(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 25, horizontal: 30),
+                  padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 30),
                   child: Column(
                     children: [
                       Align(
                         alignment: Alignment.topLeft,
                         child: GestureDetector(
-                          onTap: () => Navigator.of(context).pop(),
+                          onTap: () => Navigator.of(context).pop(), // Retour à l'écran précédent
                           child: const Icon(Icons.arrow_back),
                         ),
                       ),
@@ -48,7 +48,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         height: 200,
                         padding: const EdgeInsets.all(20.0),
                         child: Image.asset(
-                          "assets/image3.png",
+                          "assets/image3.png", // Image de vérification
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -70,6 +70,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 20),
+                      // Widget pour la saisie du code OTP
                       Pinput(
                         length: 6,
                         showCursor: true,
@@ -97,6 +98,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
+                        // Bouton personnalisé pour vérifier le code OTP
                         child: CustomButton(
                           text: "Vérifier",
                           onPressed: () {
@@ -134,7 +136,7 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  // verify otp
+  // Méthode pour vérifier le code OTP
   void verifyOtp(BuildContext context, String userOtp) {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     ap.verifyOtp(
@@ -142,11 +144,11 @@ class _OtpScreenState extends State<OtpScreen> {
       verificationId: widget.verificationId,
       userOtp: userOtp,
       onSuccess: () {
-        // checking whether user exists in the db
+        // Vérification si l'utilisateur existe dans la base de données
         ap.checkExistingUser().then(
           (value) async {
             if (value == true) {
-              // user exists in our app
+              // L'utilisateur existe dans l'application
               ap.getDataFromFirestore().then(
                     (value) => ap.saveUserDataToSP().then(
                           (value) => ap.setSignIn().then(
@@ -163,7 +165,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
                   );
             } else {
-              // new user
+              // Nouvel utilisateur
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(

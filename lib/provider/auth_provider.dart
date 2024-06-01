@@ -1,23 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:allobrico_worker/model/worker_model.dart';
-import 'package:allobrico_worker/screens/otp_screen.dart';
-import 'package:allobrico_worker/utils/utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:allobrico_worker/model/worker_model.dart'; // Modèle pour les travailleurs
+import 'package:allobrico_worker/screens/otp_screen.dart'; // Écran de vérification OTP
+import 'package:allobrico_worker/utils/utils.dart'; // Utilitaires (par exemple, pour afficher des messages)
+import 'package:cloud_firestore/cloud_firestore.dart'; // Intégration de Firestore
+import 'package:firebase_auth/firebase_auth.dart'; // Authentification Firebase
+import 'package:firebase_storage/firebase_storage.dart'; // Stockage Firebase
+import 'package:flutter/material.dart'; // Composants Material Design pour Flutter
+import 'package:shared_preferences/shared_preferences.dart'; // Stockage local partagé
 
 class AuthProvider extends ChangeNotifier {
-  bool _isSignedIn = false;
+  bool _isSignedIn = false; // Indicateur d'état de connexion
   bool get isSignedIn => _isSignedIn;
-  bool _isLoading = false;
+  bool _isLoading = false; // Indicateur de chargement
   bool get isLoading => _isLoading;
-  String? _uid;
+  String? _uid; // UID de l'utilisateur
   String get uid => _uid!;
-  WorkerModel? _workerModel;
+  WorkerModel? _workerModel; // Modèle de données du travailleur
   WorkerModel get userModel => _workerModel!;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -25,15 +25,17 @@ class AuthProvider extends ChangeNotifier {
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
   AuthProvider() {
-    checkSign();
+    checkSign(); // Vérifie l'état de connexion lors de l'initialisation
   }
 
+  // Vérifie si l'utilisateur est connecté
   void checkSign() async {
     final SharedPreferences s = await SharedPreferences.getInstance();
     _isSignedIn = s.getBool("is_signedin") ?? false;
     notifyListeners();
   }
 
+  // Définit l'utilisateur comme connecté
   Future setSignIn() async {
     final SharedPreferences s = await SharedPreferences.getInstance();
     s.setBool("is_signedin", true);
@@ -41,7 +43,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // signin
+  // Connexion avec le numéro de téléphone
   void signInWithPhone(BuildContext context, String phoneNumber) async {
     try {
       await _firebaseAuth.verifyPhoneNumber(
@@ -67,7 +69,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  // verify otp
+  // Vérification du code OTP
   void verifyOtp({
     required BuildContext context,
     required String verificationId,
@@ -86,7 +88,7 @@ class AuthProvider extends ChangeNotifier {
       User? worker = (await _firebaseAuth.signInWithCredential(creds)).user;
 
       if (worker != null) {
-        // carry our logic
+        // Logique à exécuter après la vérification réussie
         _uid = worker.uid;
         onSuccess();
       }
@@ -99,7 +101,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  // DATABASE OPERATIONS
+  // Opérations sur la base de données
   Future<bool> checkExistingUser() async {
     DocumentSnapshot snapshot = await _firebaseFirestore.collection("workers").doc(_uid).get();
     if (snapshot.exists) {
@@ -111,6 +113,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  // Enregistrement des données de l'utilisateur dans Firebase
   void saveUserDataToFirebase({
     required BuildContext context,
     required WorkerModel workerModel,
@@ -120,7 +123,7 @@ class AuthProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      // uploading image to firebase storage.
+      // Téléchargement de l'image sur Firebase Storage
       await storeFileToStorage("Worker_profilePic/$_uid", profilePic).then((value) {
         workerModel.profilePic = value;
         workerModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
@@ -129,16 +132,15 @@ class AuthProvider extends ChangeNotifier {
       });
       _workerModel = workerModel;
 
-      // uploading to database
-     await _firebaseFirestore.collection("workers").doc(_uid).set({
-  ...workerModel.toMap(),
-  'workerType': workerModel.workerType.toString(), // Enregistrez le type de travailleur sous forme de chaîne de caractères
-}).then((value) {
-  onSuccess();
-  _isLoading = false;
-  notifyListeners();
-});
-
+      // Téléchargement des données dans Firestore
+      await _firebaseFirestore.collection("workers").doc(_uid).set({
+        ...workerModel.toMap(),
+        'workerType': workerModel.workerType.toString(), // Enregistre le type de travailleur sous forme de chaîne de caractères
+      }).then((value) {
+        onSuccess();
+        _isLoading = false;
+        notifyListeners();
+      });
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message.toString());
       _isLoading = false;
@@ -146,6 +148,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  // Téléchargement d'un fichier vers Firebase Storage
   Future<String> storeFileToStorage(String ref, File file) async {
     UploadTask uploadTask = _firebaseStorage.ref().child(ref).putFile(file);
     TaskSnapshot snapshot = await uploadTask;
@@ -153,6 +156,7 @@ class AuthProvider extends ChangeNotifier {
     return downloadUrl;
   }
 
+  // Récupération des données depuis Firestore
   Future getDataFromFirestore() async {
     await _firebaseFirestore.collection("workers").doc(_firebaseAuth.currentUser!.uid).get().then((DocumentSnapshot snapshot) {
       _workerModel = WorkerModel(
@@ -163,34 +167,35 @@ class AuthProvider extends ChangeNotifier {
         uid: snapshot['uid'],
         profilePic: snapshot['profilePic'],
         phoneNumber: snapshot['phoneNumber'],
-        workerType: getWorkerTypeFromFirestore(snapshot['workerType']), // Ajoutez cette ligne pour récupérer le type de travailleur
+        workerType: getWorkerTypeFromFirestore(snapshot['workerType']), // Récupère le type de travailleur
       );
       _uid = userModel.uid;
     });
   }
 
+  // Conversion de la chaîne de caractères en type de travailleur
   WorkerType getWorkerTypeFromFirestore(dynamic value) {
-  if (value is String) {
-    switch (value.toLowerCase()) {
-      case 'plombier':
-        return WorkerType.plombier;
-      case 'electricien':
-        return WorkerType.electricien;
-      case 'peintre':
-        return WorkerType.peintre;
+    if (value is String) {
+      switch (value.toLowerCase()) {
+        case 'plombier':
+          return WorkerType.plombier;
+        case 'electricien':
+          return WorkerType.electricien;
+        case 'peintre':
+          return WorkerType.peintre;
+      }
     }
+    // Si la valeur ne correspond à aucun type, retourne une valeur par défaut
+    return WorkerType.plombier; // Par défaut, retourne 'plombier' si la valeur est invalide
   }
-  // If the value doesn't match any enum, return a default value or handle the error as needed.
-  return WorkerType.plombier; // Default to plombier if the value is invalid.
-}
 
-
-  // STORING DATA LOCALLY
+  // Enregistrement des données localement
   Future saveUserDataToSP() async {
     SharedPreferences s = await SharedPreferences.getInstance();
     await s.setString("worker_model", jsonEncode(userModel.toMap()));
   }
 
+  // Récupération des données locales
   Future getDataFromSP() async {
     SharedPreferences s = await SharedPreferences.getInstance();
     String data = s.getString("worker_model") ?? '';
@@ -199,6 +204,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Déconnexion de l'utilisateur
   Future userSignOut() async {
     SharedPreferences s = await SharedPreferences.getInstance();
     await _firebaseAuth.signOut();
@@ -207,4 +213,3 @@ class AuthProvider extends ChangeNotifier {
     s.clear();
   }
 }
-

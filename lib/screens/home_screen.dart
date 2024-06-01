@@ -1,8 +1,8 @@
-import 'package:allobrico_worker/model/request_model.dart';
-import 'package:allobrico_worker/widgets/drawer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:allobrico_worker/model/request_model.dart'; // Modèle pour les requêtes de réservation
+import 'package:allobrico_worker/widgets/drawer.dart'; // Drawer personnalisé
+import 'package:cloud_firestore/cloud_firestore.dart'; // Intégration de Firestore
+import 'package:firebase_auth/firebase_auth.dart'; // Authentification Firebase
+import 'package:flutter/material.dart'; // Composants Material Design pour Flutter
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,15 +12,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<BookingRequest> bookingRequests = [];
-  String filter = 'En cours';
+  List<BookingRequest> bookingRequests = []; // Liste des requêtes de réservation
+  String filter = 'En cours'; // Filtre pour les requêtes
 
   @override
   void initState() {
     super.initState();
-    fetchBookingRequests();
+    fetchBookingRequests(); // Récupère les requêtes de réservation au démarrage
   }
 
+  // Récupère les requêtes de réservation depuis Firestore
   void fetchBookingRequests() {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -52,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Bouton personnalisé avec couleur dynamique selon le filtre actif
   ElevatedButton buildCustomElevatedButton({
     required String text,
     required VoidCallback onPressed,
@@ -60,11 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Color backgroundColor;
     Color textColor;
     if (text == currentFilter) {
-      backgroundColor = const Color.fromRGBO(251, 53, 105, 1); // Change to your desired color
-      textColor = const Color.fromRGBO(255, 230, 236, 1); // Change to your desired color
+      backgroundColor = const Color.fromRGBO(251, 53, 105, 1); // Couleur active
+      textColor = const Color.fromRGBO(255, 230, 236, 1); // Couleur de texte active
     } else {
-      backgroundColor = const Color.fromRGBO(255, 230, 236, 1); // Default color
-      textColor = const Color.fromRGBO(251, 53, 105, 1); // Default color
+      backgroundColor = const Color.fromRGBO(255, 230, 236, 1); // Couleur par défaut
+      textColor = const Color.fromRGBO(251, 53, 105, 1); // Couleur de texte par défaut
     }
 
     return ElevatedButton(
@@ -72,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
           if (states.contains(MaterialState.pressed)) {
-            return Colors.white.withOpacity(0.5); // Change to your desired pressed color
+            return Colors.white.withOpacity(0.5); // Couleur lorsque pressé
           }
           return backgroundColor;
         }),
@@ -91,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const MyDrawer(),
+      drawer: const MyDrawer(), // Drawer personnalisé
       appBar: AppBar(
         leading: Builder(
           builder: (context) => IconButton(
@@ -182,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Accepter une requête de réservation
   void acceptBookingRequest(BookingRequest bookingRequest) {
     FirebaseFirestore.instance
       .collection('booking_requests')
@@ -197,6 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
   }
 
+  // Refuser une requête de réservation
   void declineBookingRequest(BookingRequest bookingRequest) {
     FirebaseFirestore.instance
       .collection('booking_requests')
@@ -212,6 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
   }
 
+  // Terminer une requête de réservation
   void terminerBookingRequest(BookingRequest bookingRequest) {
     FirebaseFirestore.instance
       .collection('booking_requests')
@@ -223,10 +228,11 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       })
       .catchError((error) {
-        print('Error declining booking request: $error');
+        print('Error terminating booking request: $error');
       });
   }
 
+  // Annuler une requête de réservation
   void annulerBookingRequest(BookingRequest bookingRequest) {
     FirebaseFirestore.instance
       .collection('booking_requests')
@@ -238,11 +244,9 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       })
       .catchError((error) {
-        print('Error declining booking request: $error');
+        print('Error cancelling booking request: $error');
       });
   }
-
-  
 }
 
 class BookingRequestCard extends StatelessWidget {
@@ -360,5 +364,4 @@ class BookingRequestCard extends StatelessWidget {
       ),
     );
   }
-
 }

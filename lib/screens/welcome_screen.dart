@@ -1,9 +1,9 @@
-import 'package:allobrico_worker/screens/home_screen.dart';
-import 'package:allobrico_worker/screens/register_screen.dart';
-import 'package:allobrico_worker/widgets/custom_button.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:allobrico_worker/provider/auth_provider.dart';
+import 'package:allobrico_worker/screens/home_screen.dart'; // Écran d'accueil
+import 'package:allobrico_worker/screens/register_screen.dart'; // Écran d'inscription
+import 'package:allobrico_worker/widgets/custom_button.dart'; // Bouton personnalisé
+import 'package:flutter/material.dart'; // Composants Material Design pour Flutter
+import 'package:provider/provider.dart'; // Gestionnaire d'état pour Flutter
+import 'package:allobrico_worker/provider/auth_provider.dart'; // Provider pour la gestion de l'authentification
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -15,6 +15,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
+    // Récupération du provider d'authentification
     final ap = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
@@ -25,11 +26,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Affichage de l'image du logo
                 Image.asset(
                   "assets/image1.png",
                   height: 300,
                 ),
                 const SizedBox(height: 20),
+                // Titre de l'application
                 const Text(
                   "Allo Brico Worker",
                   style: TextStyle(
@@ -38,6 +41,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
+                // Description de l'application
                 const Text(
                   "Rejoignez une communauté dynamique de travailleurs",
                   style: TextStyle(
@@ -48,15 +52,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
-                // custom button
+                // Bouton personnalisé
                 SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: CustomButton(
+                    // Action lors de l'appui sur le bouton
                     onPressed: () async {
                       if (ap.isSignedIn == true) {
+                        // Si l'utilisateur est déjà connecté, récupérer les données et rediriger vers l'écran d'accueil
                         await ap.getDataFromSP().whenComplete(
-                              (){
+                              () {
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
@@ -67,6 +73,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               },
                             );
                       } else {
+                        // Sinon, rediriger vers l'écran d'inscription
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -75,7 +82,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         );
                       }
                     },
-                    text: "Get started",
+                    text: "Get started", // Texte du bouton
                   ),
                 )
               ],
@@ -86,4 +93,3 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 }
-
